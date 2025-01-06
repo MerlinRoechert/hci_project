@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototyp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .page {
+            padding: 20px;
+        }
+        .dropdown-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            opacity: 1;
+        }
+        .dropdown-card.disabled {
+            background-color: #f9f9f9;
+            opacity: 0.6;
+        }
+        .dropdown-card.disabled .header .button {
+            pointer-events: auto;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+        }
+        .dropdown-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dropdown-card .header div {
+            flex: 1;
+        }
+        .dropdown-card .header .button {
+            flex: none;
+        }
+        .dropdown-card .button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .dropdown-card .button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown-card .details {
+            display: none;
+            margin-top: 10px;
+        }
+        .dropdown-card.open .details {
+            display: block;
+        }
+        .details .upload-button {
+            margin-top: 10px;
+        }
+        .details .file-name {
+            margin-left: 10px;
+        }
+        .alert {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }
+        .alert.show {
+            display: block;
+        }
+    </style>
+    <script>
+        const uploadedFiles = {}; // Store uploaded files by dropdown-card index
+
+        function toggleDropdown(card) {
+            if (!card.classList.contains('disabled')) {
+                card.classList.toggle('open');
+            }
+        }
+
+        function handleDownload(event) {
+            event.stopPropagation();
+            const card = event.target.closest('.dropdown-card');
+            const index = Array.from(document.querySelectorAll('.dropdown-card')).indexOf(card);
+
+            if (card.classList.contains('disabled')) {
+                const link = document.createElement('a');
+                link.href = '#'; // Replace with actual file path if necessary
+                link.download = 'korrigiert.pdf';
+                link.click();
+
+                const alertBox = document.getElementById('downloadAlert');
+                alertBox.textContent = `Datei "korrigiert.pdf" heruntergeladen`;
+                alertBox.classList.add('show');
+                setTimeout(() => {
+                    alertBox.classList.remove('show');
+                }, 3000);
+                return;
+            }
+
+            const fileName = uploadedFiles[index];
+
+            if (fileName) {
+                const link = document.createElement('a');
+                link.href = '#'; // Replace with actual file path if necessary
+                link.download = fileName;
+                link.click();
+
+                const alertBox = document.getElementById('downloadAlert');
+                alertBox.textContent = `Datei "${fileName}" heruntergeladen`;
+                alertBox.classList.add('show');
+                setTimeout(() => {
+                    alertBox.classList.remove('show');
+                }, 3000);
+            } else {
+                alert('Keine Datei zum Herunterladen verfügbar.');
+            }
+        }
+
+        function handleUpload(event) {
+            event.stopPropagation();
+            const input = document.createElement('input');
+            input.type = 'file';
+            const card = event.target.closest('.dropdown-card');
+            const index = Array.from(document.querySelectorAll('.dropdown-card')).indexOf(card);
+
+            input.onchange = function(e) {
+                const fileName = e.target.files[0].name;
+                const fileSpan = card.querySelector('.file-name');
+                fileSpan.textContent = fileName;
+
+                uploadedFiles[index] = fileName;
+
+                const alertBox = document.getElementById('uploadAlert');
+                alertBox.textContent = `Datei "${fileName}" erfolgreich hochgeladen`;
+                alertBox.classList.add('show');
+                setTimeout(() => {
+                    alertBox.classList.remove('show');
+                }, 3000);
+            };
+            input.click();
+        }
+
+        function disablePastDueCards() {
+            const cards = document.querySelectorAll('.dropdown-card');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize to midnight for accurate comparison
+
+            // Adjust to German timezone (CET/CEST)
+            const timezoneOffset = today.getTimezoneOffset() * 60000;
+            const germanTime = new Date(today.getTime() - timezoneOffset);
+
+            cards.forEach(card => {
+                const dueDateText = card.querySelector('.header div:nth-child(2)').textContent;
+                const dueDateParts = dueDateText.replace('Abgabe bis ', '').split('.');
+                const dueDate = new Date(`${dueDateParts[2]}-${dueDateParts[1]}-${dueDateParts[0]}`);
+                dueDate.setHours(0, 0, 0, 0); // Normalize to midnight for accurate comparison
+
+                // Adjust due date to German timezone
+                const dueDateGermanTime = new Date(dueDate.getTime() - timezoneOffset);
+
+                if (dueDateGermanTime < germanTime) {
+                    card.classList.add('disabled');
+                }
+            });
+        }
+
+        window.onload = disablePastDueCards;
+    </script>
+</head>
+<body>
+
+<div id="abgabeSystemStudi" class="page">
+    <h1>Abgabe System - Studi</h1>
+    <div id="downloadAlert" class="alert">Datei heruntergeladen</div>
+    <div id="uploadAlert" class="alert">Datei erfolgreich hochgeladen</div>
+    <div class="dropdown-card" onclick="toggleDropdown(this)">
+        <div class="header">
+            <div>Aufgabe 1</div>
+            <div>Abgabe bis 03.01.2025</div>
+            <div>Erreichte Punkte: 10</div>
+            <button class="button" onclick="handleDownload(event);">Download</button>
+        </div>
+        <div class="details">
+            <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
+            <span class="file-name">Keine Datei hochgeladen</span>
+        </div>
+    </div>
+    <div class="dropdown-card" onclick="toggleDropdown(this)">
+        <div class="header">
+            <div>Aufgabe 2</div>
+            <div>Abgabe bis 15.01.2025</div>
+            <div>Erreichte Punkte: XX</div>
+            <button class="button" onclick="handleDownload(event);">Download</button>
+        </div>
+        <div class="details">
+            <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
+            <span class="file-name">Keine Datei hochgeladen</span>
+        </div>
+    </div>
+    <div class="dropdown-card" onclick="toggleDropdown(this)">
+        <div class="header">
+            <div>Aufgabe 3</div>
+            <div>Abgabe bis 30.01.2025</div>
+            <div>Erreichte Punkte: XX</div>
+            <button class="button" onclick="handleDownload(event);">Download</button>
+        </div>
+        <div class="details">
+            <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
+            <span class="file-name">Keine Datei hochgeladen</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

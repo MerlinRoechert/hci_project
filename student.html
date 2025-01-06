@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prototyp</title>
+    <title>Abgabe System - Student</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
-        .page {
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
             padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
         }
         .dropdown-card {
-            border: 1px solid #ccc;
-            padding: 10px;
             margin-bottom: 20px;
             cursor: pointer;
             position: relative;
@@ -23,6 +29,9 @@
             flex-direction: column;
             background-color: white;
             opacity: 1;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            
         }
         .dropdown-card.disabled {
             background-color: #f9f9f9;
@@ -38,12 +47,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: #007BFF;
+            color: white; 
+            padding: 10px; 
+             
         }
         .dropdown-card .header div {
             flex: 1;
         }
         .dropdown-card .header .button {
             flex: none;
+            background-color: green;
         }
         .dropdown-card .button {
             background-color: #007BFF;
@@ -65,6 +79,9 @@
         }
         .details .upload-button {
             margin-top: 10px;
+            min-width: 150px;
+
+
         }
         .details .file-name {
             margin-left: 10px;
@@ -182,45 +199,46 @@
     </script>
 </head>
 <body>
-
-<div id="abgabeSystemStudi" class="page">
-    <h1>Abgabe System - Studi</h1>
-    <div id="downloadAlert" class="alert">Datei heruntergeladen</div>
-    <div id="uploadAlert" class="alert">Datei erfolgreich hochgeladen</div>
-    <div class="dropdown-card" onclick="toggleDropdown(this)">
-        <div class="header">
-            <div>Aufgabe 1</div>
-            <div>Abgabe bis 03.01.2025</div>
-            <div>Erreichte Punkte: 10</div>
-            <button class="button" onclick="handleDownload(event);">Download</button>
+<div class="container">
+    <div id="abgabeSystemStudi" class="page">
+        <h1>Abgabe System - Studi</h1>
+        <div id="downloadAlert" class="alert">Datei heruntergeladen</div>
+        <div id="uploadAlert" class="alert">Datei erfolgreich hochgeladen</div>
+        <div class="dropdown-card" onclick="toggleDropdown(this)">
+            <div class="header">
+                <div>Aufgabe 1</div>
+                <div>Abgabe bis 03.01.2025</div>
+                <div>Erreichte Punkte: 66</div>
+                <button class="button" onclick="handleDownload(event);">Korrektur herunterladen</button>
+            </div>
+            <div class="details">
+                <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
+                <span class="file-name">Keine Datei hochgeladen</span>
+            </div>
         </div>
-        <div class="details">
-            <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
-            <span class="file-name">Keine Datei hochgeladen</span>
+        <div class="dropdown-card" onclick="toggleDropdown(this)">
+            <div class="header">
+                <div>Aufgabe 2</div>
+                <div>Abgabe bis 15.01.2025</div>
+                <div>Erreichte Punkte: XX</div>
+                <button class="button" onclick="handleDownload(event);">Korrektur herunterladen</button>
+            </div>
+            <div class="details">
+                <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
+                <span class="file-name">Keine Datei hochgeladen</span>
+            </div>
         </div>
-    </div>
-    <div class="dropdown-card" onclick="toggleDropdown(this)">
-        <div class="header">
-            <div>Aufgabe 2</div>
-            <div>Abgabe bis 15.01.2025</div>
-            <div>Erreichte Punkte: XX</div>
-            <button class="button" onclick="handleDownload(event);">Download</button>
-        </div>
-        <div class="details">
-            <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
-            <span class="file-name">Keine Datei hochgeladen</span>
-        </div>
-    </div>
-    <div class="dropdown-card" onclick="toggleDropdown(this)">
-        <div class="header">
-            <div>Aufgabe 3</div>
-            <div>Abgabe bis 30.01.2025</div>
-            <div>Erreichte Punkte: XX</div>
-            <button class="button" onclick="handleDownload(event);">Download</button>
-        </div>
-        <div class="details">
-            <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
-            <span class="file-name">Keine Datei hochgeladen</span>
+        <div class="dropdown-card" onclick="toggleDropdown(this)">
+            <div class="header">
+                <div>Aufgabe 3</div>
+                <div>Abgabe bis 30.01.2025</div>
+                <div>Erreichte Punkte: XX</div>
+                <button class="button" onclick="handleDownload(event);">Korrektur herunterladen</button>
+            </div>
+            <div class="details">
+                <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
+                <span class="file-name">Keine Datei hochgeladen</span>
+            </div>
         </div>
     </div>
 </div>

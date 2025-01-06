@@ -170,7 +170,7 @@
         <div class="task">
             <div class="task-header" onclick="toggleTaskContent(this)">
                 <h3>Aufgabe 1 (Max. Punkte: 100)</h3>
-                <span>Abgabe bis: xx.xx.xxxx</span>
+                <span>Abgabe bis: 03.01.2025</span>
             </div>
             <div class="task-content">
                 <div class="student-entry-header">
@@ -184,7 +184,7 @@
                     <input type="text" placeholder="Punkte">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
                         <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                     <input type="text" placeholder="Punkte">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
                         <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
         <div class="task">
             <div class="task-header" onclick="toggleTaskContent(this)">
                 <h3>Aufgabe 2 (Max. Punkte: 50)</h3>
-                <span>Abgabe bis: xx.xx.xxxx</span>
+                <span>Abgabe bis: 15.01.2025</span>
             </div>
             <div class="task-content">
                 <div class="student-entry-header">
@@ -217,7 +217,7 @@
                     <input type="text" placeholder="Punkte">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
                         <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
                     </div>
                 </div>
@@ -226,12 +226,46 @@
                     <input type="text" placeholder="Punkte">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
                         <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="task">
+            <div class="task-header" onclick="toggleTaskContent(this)">
+                <h3>Aufgabe 3 (Max. Punkte: 75)</h3>
+                <span>Abgabe bis: 30.01.2025</span>
+            </div>
+            <div class="task-content">
+                <div class="student-entry-header">
+                    <span>Name</span>
+                    <span>Punkte</span>
+                    <span>Datei</span>
+                    <span>Aktionen</span>
+                </div>
+                <div class="student-entry">
+                    <span>Student 1</span>
+                    <input type="text" placeholder="Punkte">
+                    <span class="file-name">Keine Korrektur hochgeladen</span>
+                    <div class="button-group">
+                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                    </div>
+                </div>
+                <div class="student-entry">
+                    <span>Student 2</span>
+                    <input type="text" placeholder="Punkte">
+                    <span class="file-name">Keine Korrektur hochgeladen</span>
+                    <div class="button-group">
+                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>

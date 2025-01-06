@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abgabe System - Tutor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        .task {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .task-header {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .task-header h3 {
+            margin: 0;
+        }
+
+        .task-header span {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-header span::after {
+            content: '\25BC';
+            margin-left: 10px;
+            transition: transform 0.3s;
+        }
+
+        .task-header.collapsed span::after {
+            transform: rotate(-90deg);
+        }
+
+        .task-content {
+            padding: 10px;
+            display: none;
+        }
+
+        .student-entry {
+            display: grid;
+            grid-template-columns: 150px 100px 1fr auto;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            padding: 5px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .student-entry:first-child {
+            border-top: none;
+        }
+
+        .student-entry input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .student-entry .file-name {
+            font-style: italic;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .student-entry .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+
+        .student-entry button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .student-entry .upload-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .student-entry .upload-button:hover {
+            background-color: #218838;
+        }
+
+        .student-entry .button {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .student-entry .button:hover {
+            background-color: #0056b3;
+        }
+
+        .student-entry-header {
+            display: grid;
+            grid-template-columns: 150px 100px 1fr auto;
+            gap: 10px;
+            font-weight: bold;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+
+        .alert {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert .close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Abgabe System</h1>
+        <div id="correctionAlert" class="alert">
+            Korrekturdatei hochgeladen
+            <span class="close" onclick="closeAlert()">&times;</span>
+        </div>
+
+        <div class="task">
+            <div class="task-header" onclick="toggleTaskContent(this)">
+                <h3>Aufgabe 1 (Max. Punkte: 100)</h3>
+                <span>Abgabe bis: xx.xx.xxxx</span>
+            </div>
+            <div class="task-content">
+                <div class="student-entry-header">
+                    <span>Name</span>
+                    <span>Punkte</span>
+                    <span>Datei</span>
+                    <span>Aktionen</span>
+                </div>
+                <div class="student-entry">
+                    <span>Student 1</span>
+                    <input type="text" placeholder="Punkte">
+                    <span class="file-name">Keine Korrektur hochgeladen</span>
+                    <div class="button-group">
+                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                    </div>
+                </div>
+                <div class="student-entry">
+                    <span>Student 2</span>
+                    <input type="text" placeholder="Punkte">
+                    <span class="file-name">Keine Korrektur hochgeladen</span>
+                    <div class="button-group">
+                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="task">
+            <div class="task-header" onclick="toggleTaskContent(this)">
+                <h3>Aufgabe 2 (Max. Punkte: 50)</h3>
+                <span>Abgabe bis: xx.xx.xxxx</span>
+            </div>
+            <div class="task-content">
+                <div class="student-entry-header">
+                    <span>Name</span>
+                    <span>Punkte</span>
+                    <span>Datei</span>
+                    <span>Aktionen</span>
+                </div>
+                <div class="student-entry">
+                    <span>Student 1</span>
+                    <input type="text" placeholder="Punkte">
+                    <span class="file-name">Keine Korrektur hochgeladen</span>
+                    <div class="button-group">
+                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                    </div>
+                </div>
+                <div class="student-entry">
+                    <span>Student 2</span>
+                    <input type="text" placeholder="Punkte">
+                    <span class="file-name">Keine Korrektur hochgeladen</span>
+                    <div class="button-group">
+                        <button class="button" onclick="handleDownload()">Download</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTaskContent(header) {
+            const content = header.nextElementSibling;
+            const isCollapsed = content.style.display === 'none' || content.style.display === '';
+            content.style.display = isCollapsed ? 'block' : 'none';
+            header.classList.toggle('collapsed', !isCollapsed);
+        }
+
+        function handleDownload() {
+            const link = document.createElement('a');
+            link.href = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // Beispiel-PDF-Datei
+            link.download = 'Beispiel_Dokument.pdf';
+            link.click();
+        }
+
+        function handleCorrectionUpload(event, assignment, student) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = function (e) {
+                const fileName = e.target.files[0].name;
+                const alertBox = document.getElementById('correctionAlert');
+                alertBox.textContent = `Korrekturdatei "${fileName}" für ${student.name} hochgeladen `;
+                alertBox.innerHTML += '<span class="close" onclick="closeAlert()">&times;</span>';
+                alertBox.classList.add('show');
+                student.fileElement.textContent = fileName; // Update Dateiname
+                student.fileElement.style.color = '#000';
+                student.fileElement.style.fontStyle = 'normal';
+            };
+            input.click();
+            event.stopPropagation();
+        }
+
+        function closeAlert() {
+            const alertBox = document.getElementById('correctionAlert');
+            alertBox.classList.remove('show');
+        }
+    </script>
+</body>
+</html>

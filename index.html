@@ -14,6 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
 
         .login-container {
@@ -82,22 +83,27 @@
         .login-btn:hover {
             background-color: #0056b3;
         }
+        #language-selector {
+            font-size: 17px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+    
     <div class="login-container">
         <h1>SSO Login</h1>
         <form id="login-form">
             <div class="form-group">
-                <label for="username">Benutzername</label>
+                <label id="username-text" for="username"></label>
                 <input type="text" id="username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="password">Passwort</label>
+                <label id="password-text" for="password"></label>
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <label>Anmelden als:</label>
+                <label id="role-text"></label>
                 <div class="role-options">
                     <input type="radio" id="tutor" name="role" value="tutor" required>
                     <label for="tutor">Tutor</label>
@@ -105,9 +111,18 @@
                     <label for="student">Student</label>
                 </div>
             </div>
-            <button type="button" class="login-btn" id="login-button">Einloggen</button>
+            <button type="button" class="login-btn" id="login-button"></button>
         </form>
     </div>
+
+    <div id="language-selector">
+        <label id="language-selector-text" for="language"></label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="german">Deutsch</option>
+            <option value="english">English</option>
+        </select>
+    </div>
+
     <script>
         document.getElementById('login-button').addEventListener('click', function () {
             const username = document.getElementById('username').value;
@@ -121,9 +136,46 @@
                     window.location.href = 'student.html';
                 }
             } else {
-                alert('Bitte füllen Sie alle Felder aus und wählen Sie eine Rolle aus.');
+                
+                if(document.getElementById('language').value === "german"){
+                    alert('Bitte füllen Sie alle Felder aus und wählen Sie eine Rolle aus.');    
+                } else {
+                    alert('Please fill out everything and choose a role.');
+                }
+                
             }
         });
+
+        const translations = {
+            german: {
+                usernameText: "Benutzername",
+                passwordText: "Passwort",
+                roleText: "Anmelden als:",
+                loginButton: "Einloggen",
+                languageText: "Choose language"
+            },
+            english: {
+                usernameText: "Username",
+                passwordText: "Password",
+                roleText: "Login as:",
+                loginButton: "Log in",
+                languageText: "Sprache wählen"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('language').value;
+            const translate = translations[lang];
+            document.getElementById('username-text').textContent = translate.usernameText;
+            document.getElementById('password-text').textContent = translate.passwordText;
+            document.getElementById('role-text').textContent = translate.roleText;
+            document.getElementById('login-button').textContent = translate.loginButton;
+            document.getElementById('language-selector-text').textContent = translate.languageText;
+        }
+
+        changeLanguage();
     </script>
+
+    
 </body>
 </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abgabe System - Student</title>
+    <title id="title-text">Abgabe System - Student</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,6 +102,10 @@
         .alert.show {
             display: block;
         }
+        #language-selector {
+            font-size: 17px;
+            margin-top: 20px;
+        }
     </style>
     <script>
         const uploadedFiles = {}; // Store uploaded files by dropdown-card index
@@ -128,12 +132,16 @@
 
             if (card.classList.contains('disabled')) {
                 const link = document.createElement('a');
-                link.href = '#'; // Replace with actual file path if necessary
                 link.download = 'korrigiert.pdf';
                 link.click();
 
                 const alertBox = document.getElementById('downloadAlert');
-                alertBox.textContent = `Datei "korrigiert.pdf" heruntergeladen`;
+                if(document.getElementById('language').value === "german"){
+                    alertBox.textContent = `Datei "korrigiert.pdf" heruntergeladen`;    
+                } else {
+                    alertBox.textContent = `File "korrigiert.pdf" downloaded`;
+                }
+                
                 alertBox.classList.add('show');
                 setTimeout(() => {
                     alertBox.classList.remove('show');
@@ -145,18 +153,27 @@
 
             if (fileName) {
                 const link = document.createElement('a');
-                link.href = '#'; // Replace with actual file path if necessary
                 link.download = fileName;
                 link.click();
 
                 const alertBox = document.getElementById('downloadAlert');
-                alertBox.textContent = `Datei "${fileName}" heruntergeladen`;
+                if(document.getElementById('language').value === "german"){
+                    alertBox.textContent = `Datei "${fileName}" heruntergeladen`;   
+                } else {
+                    alertBox.textContent = `File "${fileName}" downloaded`;
+                }
+                
                 alertBox.classList.add('show');
                 setTimeout(() => {
                     alertBox.classList.remove('show');
                 }, 3000);
             } else {
-                alert('Keine Datei zum Einsehen verfügbar.');
+                if(document.getElementById('language').value === "german"){
+                    alert('Keine Datei zum Einsehen verfügbar.');
+                } else {
+                    alert('No file available for viewing.');
+                }
+                
             }
         }
 
@@ -170,12 +187,22 @@
             input.onchange = function(e) {
                 const fileName = e.target.files[0].name;
                 const fileInfo = card.querySelector('.file-info');
-                fileInfo.querySelector('.uploaded-file').textContent = `Zuletzt hochgeladen: ${fileName}`;
+                if(document.getElementById('language').value === "german"){
+                    fileInfo.querySelector('.uploaded-file').textContent = `Zuletzt hochgeladen: ${fileName}`;
+                } else {
+                    fileInfo.querySelector('.uploaded-file').textContent = `last uploaded: ${fileName}`;
+                }
+                
 
                 uploadedFiles[index] = fileName;
 
                 const alertBox = document.getElementById('uploadAlert');
-                alertBox.textContent = `Datei "${fileName}" erfolgreich hochgeladen`;
+                
+                if(document.getElementById('language').value === "german"){
+                    alertBox.textContent = `Datei "${fileName}" erfolgreich hochgeladen`;
+                } else {
+                    alertBox.textContent = `File "${fileName}" succesfully uploaded`;
+                }
                 alertBox.classList.add('show');
                 setTimeout(() => {
                     alertBox.classList.remove('show');
@@ -194,16 +221,30 @@
                 submittedFiles[index] = fileName;
 
                 const fileInfo = card.querySelector('.file-info');
-                fileInfo.querySelector('.submitted-file').textContent = `Eingereichte Datei: ${fileName}`;
+                
+                if(document.getElementById('language').value === "german"){
+                    fileInfo.querySelector('.submitted-file').textContent = `Eingereichte Datei: ${fileName}`;
+                } else {
+                    fileInfo.querySelector('.submitted-file').textContent = `submitted file: ${fileName}`;
+                }
 
                 const alertBox = document.getElementById('uploadAlert');
-                alertBox.textContent = `Datei "${fileName}" erfolgreich eingereicht`;
+                
+                if(document.getElementById('language').value === "german"){
+                    alertBox.textContent = `Datei "${fileName}" erfolgreich eingereicht`;
+                } else {
+                    alertBox.textContent = `Datei "${fileName}" succesfully submitted`;
+                }
                 alertBox.classList.add('show');
                 setTimeout(() => {
                     alertBox.classList.remove('show');
                 }, 3000);
             } else {
-                alert('Bitte zuerst eine Datei hochladen, bevor Sie sie einreichen.');
+                if(document.getElementById('language').value === "german"){
+                    alert('Bitte zuerst eine Datei hochladen, bevor Sie sie einreichen.');    
+                } else {
+                    alert('please upload a file first');
+                }
             }
         }
 
@@ -232,20 +273,103 @@
         }
 
         window.onload = disablePastDueCards;
+
+        const translations = {
+            german: {
+                headerText: "Abgabe System - Studenten",
+                task1Header: "Aufgabe 1",
+                task1Deadline: "Abgabe bis 03.01.2025",
+                task1Points: "Erreichte Punkte: 66",
+                task1Correction: "Korrektur Einsehen",
+                task2Header: "Aufgabe 2",
+                task2Deadline: "Abgabe bis 15.01.2025",
+                task2Points: "Erreichte Punkte: Bewertung ausstehend",
+                task2Correction: "Korrektur Einsehen",
+                task2LastUpload: "Zuletzt hochgeladen: Keine Datei",
+                task2UploadedFile: "Eingereichte Datei: Keine Datei",
+                task2Upload: "Bearbeitung hochladen",
+                task2Submit: "Bearbeitung einreichen",
+                task3Header: "Aufgabe 3",
+                task3Deadline: "Abgabe bis 30.01.2025",
+                task3Points: "Erreichte Punkte: Bewertung ausstehend",
+                task3Correction: "Korrektur Einsehen",
+                task3LastUpload: "Zuletzt hochgeladen: Keine Datei",
+                task3UploadedFile: "Eingereichte Datei: Keine Datei",
+                task3Upload: "Bearbeitung hochladen",
+                task3Submit: "Bearbeitung einreichen"
+            },
+            english: {
+                headerText: "Submission System - Students",
+                task1Header: "Task 1",
+                task1Deadline: "Deadline: 03.01.2025",
+                task1Points: "Points achieved: 66",
+                task1Correction: "View Correction",
+                task2Header: "Task 2",
+                task2Deadline: "Deadline: 15.01.2025",
+                task2Points: "Points achieved: Evaluation pending",
+                task2Correction: "View Correction",
+                task2LastUpload: "Last uploaded: No file",
+                task2UploadedFile: "Submitted file: No file",
+                task2Upload: "Upload submission",
+                task2Submit: "Submit work",
+                task3Header: "Task 3",
+                task3Deadline: "Deadline: 30.01.2025",
+                task3Points: "Points achieved: Evaluation pending",
+                task3Correction: "View Correction",
+                task3LastUpload: "Last uploaded: No file",
+                task3UploadedFile: "Submitted file: No file",
+                task3Upload: "Upload submission",
+                task3Submit: "Submit work"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('language').value;
+            const translate = translations[lang];
+            
+            document.getElementById('header-text').textContent = translate.headerText;
+            document.getElementById('task1-header').textContent = translate.task1Header;
+            document.getElementById('task1-deadline').textContent = translate.task1Deadline;
+            document.getElementById('task1-points').textContent = translate.task1Points;
+            document.getElementById('task1-correction').textContent = translate.task1Correction;
+
+            document.getElementById('task2-header').textContent = translate.task2Header;
+            document.getElementById('task2-deadline').textContent = translate.task2Deadline;
+            document.getElementById('task2-points').textContent = translate.task2Points;
+            document.getElementById('task2-correction').textContent = translate.task2Correction;
+            document.getElementById('task2-last-upload').textContent = translate.task2LastUpload;
+            document.getElementById('task2-uploaded-file').textContent = translate.task2UploadedFile;
+            document.getElementById('task2-upload-button').textContent = translate.task2Upload;
+            document.getElementById('task2-submit-button').textContent = translate.task2Submit;
+
+            
+            
+            document.getElementById('task3-header').textContent = translate.task3Header;
+            document.getElementById('task3-deadline').textContent = translate.task3Deadline;
+            document.getElementById('task3-points').textContent = translate.task3Points;
+            document.getElementById('task3-correction').textContent = translate.task3Correction;
+            document.getElementById('task3-last-upload').textContent = translate.task3LastUpload;
+            document.getElementById('task3-uploaded-file').textContent = translate.task3UploadedFile;
+            document.getElementById('task3-upload-button').textContent = translate.task3Upload;
+            document.getElementById('task3-submit-button').textContent = translate.task3Submit;
+        }
+
+        changeLanguage();
+
     </script>
 </head>
 <body>
 <div class="container">
     <div id="abgabeSystemStudi" class="page">
-        <h1>Abgabe System - Studi</h1>
+        <h1 id="header-text">Abgabe System - Studenten</h1>
         <div id="downloadAlert" class="alert">Datei heruntergeladen</div>
         <div id="uploadAlert" class="alert">Datei erfolgreich eingereicht</div>
         <div class="dropdown-card" onclick="toggleDropdown(this)">
             <div class="header">
-                <div>Aufgabe 1</div>
-                <div>Abgabe bis 03.01.2025</div>
-                <div>Erreichte Punkte: 66</div>
-                <button class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
+                <div id="task1-header">Aufgabe 1</div>
+                <div id="task1-deadline">Abgabe bis 03.01.2025</div>
+                <div id=task1-points>Erreichte Punkte: 66</div>
+                <button id="task1-correction" class="button" onclick="handleDownload(event);">Korrektur Einsehen</button>
             </div>
             <div class="details">
                 <div class="file-info">
@@ -258,36 +382,43 @@
         </div>
         <div class="dropdown-card" onclick="toggleDropdown(this)">
             <div class="header">
-                <div>Aufgabe 2</div>
-                <div>Abgabe bis 15.01.2025</div>
-                <div>Erreichte Punkte: Bewertung ausstehend</div>
-                <button class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
+                <div id="task2-header">Aufgabe 2</div>
+                <div id="task2-deadline">Abgabe bis 15.01.2025</div>
+                <div id="task2-points">Erreichte Punkte: Bewertung ausstehend</div>
+                <button id="task2-correction" class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
             </div>
             <div class="details">
                 <div class="file-info">
-                    <span class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
-                    <span class="submitted-file">Eingereichte Datei: Keine Datei</span>
+                    <span id="task2-last-upload" class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
+                    <span id="task2-uploaded-file"class="submitted-file">Eingereichte Datei: Keine Datei</span>
                 </div>
-                <button class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
-                <button class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
+                <button id="task2-upload-button" class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
+                <button id="task2-submit-button" class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
             </div>
         </div>
         <div class="dropdown-card" onclick="toggleDropdown(this)">
             <div class="header">
-                <div>Aufgabe 3</div>
-                <div>Abgabe bis 30.01.2025</div>
-                <div>Erreichte Punkte: Bewertung ausstehend</div>
-                <button class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
+                <div id="task3-header">Aufgabe 3</div>
+                <div id="task3-deadline">Abgabe bis 30.01.2025</div>
+                <div id="task3-points">Erreichte Punkte: Bewertung ausstehend</div>
+                <button id="task3-correction" class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
             </div>
             <div class="details">
                 <div class="file-info">
-                    <span class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
-                    <span class="submitted-file">Eingereichte Datei: Keine Datei</span>
+                    <span id="task3-last-upload" class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
+                    <span id="task3-uploaded-file"class="submitted-file">Eingereichte Datei: Keine Datei</span>
                 </div>
-                <button class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
-                <button class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
+                <button id="task3-upload-button" class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
+                <button id="task3-submit-button" class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
             </div>
         </div>
+    </div>
+    <div id="language-selector">
+        <label id="language-selector-text" for="language">Choose Language</label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="german">Deutsch</option>
+            <option value="english">English</option>
+        </select>
     </div>
 </div>
 

@@ -1,340 +1,643 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Abgabe System - Tutor</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
 
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
+      .container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+      }
 
-        .task {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: white;
-        }
+      .task {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: white;
+      }
 
-        .task-header {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
+      .task-header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
 
-        .task-header h3 {
-            margin: 0;
-        }
+      .task-header h3 {
+        margin: 0;
+      }
 
-        .task-header span {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-        }
+      .task-header span {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+      }
 
-        .task-header span::after {
-            content: '\25BC';
-            margin-left: 10px;
-            transition: transform 0.3s;
-        }
+      .task-header span::after {
+        content: "\25BC";
+        margin-left: 10px;
+        transition: transform 0.3s;
+      }
 
-        .task-header.collapsed span::after {
-            transform: rotate(-90deg);
-        }
+      .task-header.collapsed span::after {
+        transform: rotate(-90deg);
+      }
 
-        .task-content {
-            padding: 10px;
-            display: none;
-        }
+      .task-content {
+        padding: 10px;
+        display: none;
+      }
 
-        .student-entry {
-            display: grid;
-            grid-template-columns: 150px 100px 1fr auto;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
-            padding: 5px 0;
-            border-top: 1px solid #eee;
-        }
+      .student-entry {
+        display: grid;
+        grid-template-columns: 150px 100px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 5px;
+        padding: 5px 0;
+        border-top: 1px solid #eee;
+      }
 
-        .student-entry:first-child {
-            border-top: none;
-        }
+      .student-entry:first-child {
+        border-top: none;
+      }
 
-        .student-entry input[type="text"] {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
-        }
+      .student-entry input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+      }
 
-        .student-entry .file-name {
-            font-style: italic;
-            color: #888;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+      .student-entry .file-name {
+        font-style: italic;
+        color: #888;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-        .student-entry .button-group {
-            display: flex;
-            justify-content: flex-end;
-            gap: 5px;
-        }
+      .student-entry .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 5px;
+      }
 
-        .student-entry button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+      .student-entry button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
 
-        .student-entry .upload-button {
-            background-color: #28a745;
-            color: white;
-        }
+      .student-entry .upload-button {
+        background-color: #28a745;
+        color: white;
+      }
 
-        .student-entry .upload-button:hover {
-            background-color: #218838;
-        }
+      .student-entry .upload-button:hover {
+        background-color: #218838;
+      }
 
-        .student-entry .button {
-            background-color: #007BFF;
-            color: white;
-        }
+      .student-entry .button {
+        background-color: #007bff;
+        color: white;
+      }
 
-        .student-entry .button:hover {
-            background-color: #0056b3;
-        }
+      .student-entry .button:hover {
+        background-color: #0056b3;
+      }
 
-        .student-entry-header {
-            display: grid;
-            grid-template-columns: 150px 100px 1fr auto;
-            gap: 10px;
-            font-weight: bold;
-            padding: 5px 0;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 5px;
-        }
+      .student-entry-header {
+        display: grid;
+        grid-template-columns: 150px 100px 1fr auto;
+        gap: 10px;
+        font-weight: bold;
+        padding: 5px 0;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 5px;
+      }
 
-        .alert {
-            display: none;
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #c3e6cb;
-            border-radius: 5px;
-            position: relative;
-        }
+      .alert {
+        display: none;
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        position: relative;
+      }
 
-        .alert.show {
-            display: block;
-        }
+      .alert.show {
+        display: block;
+      }
 
-        .alert .close {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #155724;
-        }
+      .alert .close {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #155724;
+      }
 
-        .download-all {
-            margin-top: 20px;
-            text-align: right;
-        }
+      .download-all {
+        margin-top: 20px;
+        text-align: right;
+      }
 
-        .download-all button {
-            padding: 10px 20px;
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      .download-all button {
+        padding: 10px 20px;
+        background-color: #17a2b8;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-        .download-all button:hover {
-            background-color: #138496;
-        }
+      .download-all button:hover {
+        background-color: #138496;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Abgabe System - Tutor</h1>
-        <div id="correctionAlert" class="alert">
-            Korrekturdatei hochgeladen
-            <span class="close" onclick="closeAlert()">&times;</span>
-        </div>
+      <h1 id="header-text">Abgabe System - Tutor</h1>
+      <div id="correctionAlert" class="alert">
+        Korrekturdatei hochgeladen
+        <span class="close" onclick="closeAlert()">&times;</span>
+      </div>
 
-        <div class="task">
-            <div class="task-header" onclick="toggleTaskContent(this)">
-                <h3>Aufgabe 1 (Max. Punkte: 100)</h3>
-                <span>Abgabe bis: 03.01.2025</span>
-            </div>
-            <div class="task-content">
-                <div class="student-entry-header">
-                    <span>Name</span>
-                    <span>Punkte</span>
-                    <span>Datei</span>
-                    <span>Aktionen</span>
-                </div>
-                <div class="student-entry">
-                    <span>Student 1</span>
-                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <span class="file-name">Keine Korrektur hochgeladen</span>
-                    <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
-                    </div>
-                </div>
-                <div class="student-entry">
-                    <span>Student 2</span>
-                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <span class="file-name">Keine Korrektur hochgeladen</span>
-                    <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
-                    </div>
-                </div>
-                <div class="download-all">
-                    <button onclick="downloadAllSubmissions('Aufgabe 1')">Alle Bearbeitungen einsehen</button>
-                </div>
-            </div>
+      <div class="task">
+        <div class="task-header" onclick="toggleTaskContent(this)">
+          <h3 id="task1-header">Aufgabe 1 (Max. Punkte: 100)</h3>
+          <span id="task1-deadline">Abgabe bis: 03.01.2025</span>
         </div>
-
-        <div class="task">
-            <div class="task-header" onclick="toggleTaskContent(this)">
-                <h3>Aufgabe 2 (Max. Punkte: 50)</h3>
-                <span>Abgabe bis: 15.01.2025</span>
+        <div class="task-content">
+          <div class="student-entry-header">
+            <span>Name</span>
+            <span id="points1">Punkte</span>
+            <span id="file1">Datei</span>
+            <span id="actions1">Aktionen</span>
+          </div>
+          <div class="student-entry">
+            <span>Student 1</span>
+            <input
+              type="text"
+              placeholder="Punkte"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+            <span id="no-correction-uploaded1.1" class="file-name"
+              >Keine Korrektur hochgeladen</span
+            >
+            <div class="button-group">
+              <button
+                id="view-submission1.1"
+                class="button"
+                onclick="handleDownload()"
+              >
+                Bearbeitung einsehen
+              </button>
+              <button
+                id="submit-correction1.1"
+                class="button upload-button"
+                onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })"
+              >
+                Korrektur einreichen
+              </button>
             </div>
-            <div class="task-content">
-                <div class="student-entry-header">
-                    <span>Name</span>
-                    <span>Punkte</span>
-                    <span>Datei</span>
-                    <span>Aktionen</span>
-                </div>
-                <div class="student-entry">
-                    <span>Student 1</span>
-                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <span class="file-name">Keine Korrektur hochgeladen</span>
-                    <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
-                    </div>
-                </div>
-                <div class="student-entry">
-                    <span>Student 2</span>
-                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <span class="file-name">Keine Korrektur hochgeladen</span>
-                    <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
-                    </div>
-                </div>
-                <div class="download-all">
-                    <button onclick="downloadAllSubmissions('Aufgabe 2')">Alle Bearbeitungen einsehen</button>
-                </div>
+          </div>
+          <div class="student-entry">
+            <span>Student 2</span>
+            <input
+              type="text"
+              placeholder="Punkte"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+            <span id="no-correction-uploaded1.2" class="file-name"
+              >Keine Korrektur hochgeladen</span
+            >
+            <div class="button-group">
+              <button
+                id="view-submission1.2"
+                class="button"
+                onclick="handleDownload()"
+              >
+                Bearbeitung einsehen
+              </button>
+              <button
+                id="submit-correction1.2"
+                class="button upload-button"
+                onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })"
+              >
+                Korrektur einreichen
+              </button>
             </div>
+          </div>
+          <div class="download-all">
+            <button
+              id="download-all1"
+              onclick="downloadAllSubmissions('Aufgabe 1')"
+            >
+              Alle Bearbeitungen einsehen
+            </button>
+          </div>
         </div>
+      </div>
 
-        <div class="task">
-            <div class="task-header" onclick="toggleTaskContent(this)">
-                <h3>Aufgabe 3 (Max. Punkte: 75)</h3>
-                <span>Abgabe bis: 30.01.2025</span>
-            </div>
-            <div class="task-content">
-                <div class="student-entry-header">
-                    <span>Name</span>
-                    <span>Punkte</span>
-                    <span>Datei</span>
-                    <span>Aktionen</span>
-                </div>
-                <div class="student-entry">
-                    <span>Student 1</span>
-                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <span class="file-name">Keine Korrektur hochgeladen</span>
-                    <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 3', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
-                    </div>
-                </div>
-                <div class="student-entry">
-                    <span>Student 2</span>
-                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <span class="file-name">Keine Korrektur hochgeladen</span>
-                    <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 3', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
-                    </div>
-                </div>
-                <div class="download-all">
-                    <button onclick="downloadAllSubmissions('Aufgabe 3')">Alle Bearbeitungen einsehen</button>
-                </div>
-            </div>
+      <div class="task">
+        <div class="task-header" onclick="toggleTaskContent(this)">
+          <h3 id="task2-header">Aufgabe 2 (Max. Punkte: 50)</h3>
+          <span id="task2-deadline">Abgabe bis: 15.01.2025</span>
         </div>
+        <div class="task-content">
+          <div class="student-entry-header">
+            <span>Name</span>
+            <span id="points2">Punkte</span>
+            <span id="file2">Datei</span>
+            <span id="actions2">Aktionen</span>
+          </div>
+          <div class="student-entry">
+            <span>Student 1</span>
+            <input
+              type="text"
+              placeholder="Punkte"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+            <span id="no-correction-uploaded2.1" class="file-name"
+              >Keine Korrektur hochgeladen</span
+            >
+            <div class="button-group">
+              <button
+                id="view-submission2.1"
+                class="button"
+                onclick="handleDownload()"
+              >
+                Bearbeitung einsehen
+              </button>
+              <button
+                id="submit-correction2.1"
+                class="button upload-button"
+                onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })"
+              >
+                Korrektur einreichen
+              </button>
+            </div>
+          </div>
+          <div class="student-entry">
+            <span>Student 2</span>
+            <input
+              type="text"
+              placeholder="Punkte"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+            <span id="no-correction-uploaded2.2" class="file-name"
+              >Keine Korrektur hochgeladen</span
+            >
+            <div class="button-group">
+              <button
+                id="view-submission2.2"
+                class="button"
+                onclick="handleDownload()"
+              >
+                Bearbeitung einsehen
+              </button>
+              <button
+                id="submit-correction2.2"
+                class="button upload-button"
+                onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })"
+              >
+                Korrektur einreichen
+              </button>
+            </div>
+          </div>
+          <div class="download-all">
+            <button
+              id="download-all2"
+              onclick="downloadAllSubmissions('Aufgabe 2')"
+            >
+              Alle Bearbeitungen einsehen
+            </button>
+          </div>
+        </div>
+      </div>
 
+      <div class="task">
+        <div class="task-header" onclick="toggleTaskContent(this)">
+          <h3 id="task3-header">Aufgabe 3 (Max. Punkte: 75)</h3>
+          <span id="task3-deadline">Abgabe bis: 30.01.2025</span>
+        </div>
+        <div class="task-content">
+          <div class="student-entry-header">
+            <span>Name</span>
+            <span id="points3">Punkte</span>
+            <span id="file3">Datei</span>
+            <span id="actions3">Aktionen</span>
+          </div>
+          <div class="student-entry">
+            <span>Student 1</span>
+            <input
+              type="text"
+              placeholder="Punkte"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+            <span id="no-correction-uploaded3.1" class="file-name"
+              >Keine Korrektur hochgeladen</span
+            >
+            <div class="button-group">
+              <button
+                id="view-submission3.1"
+                class="button"
+                onclick="handleDownload()"
+              >
+                Bearbeitung einsehen
+              </button>
+              <button
+                id="submit-correction3.1"
+                class="button upload-button"
+                onclick="handleCorrectionUpload(event, 'Aufgabe 3', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })"
+              >
+                Korrektur einreichen
+              </button>
+            </div>
+          </div>
+          <div class="student-entry">
+            <span>Student 2</span>
+            <input
+              type="text"
+              placeholder="Punkte"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            />
+            <span id="no-correction-uploaded3.2" class="file-name"
+              >Keine Korrektur hochgeladen</span
+            >
+            <div class="button-group">
+              <button
+                id="view-submission3.2"
+                class="button"
+                onclick="handleDownload()"
+              >
+                Bearbeitung einsehen
+              </button>
+              <button
+                id="submit-correction3.2"
+                class="button upload-button"
+                onclick="handleCorrectionUpload(event, 'Aufgabe 3', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })"
+              >
+                Korrektur einreichen
+              </button>
+            </div>
+          </div>
+          <div class="download-all">
+            <button
+              id="download-all3"
+              onclick="downloadAllSubmissions('Aufgabe 3')"
+            >
+              Alle Bearbeitungen einsehen
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="language-selector">
+        <label id="language-selector-text" for="language"
+          >Choose Language</label
+        >
+        <select id="language" onchange="changeLanguage()">
+          <option value="german">Deutsch</option>
+          <option value="english">English</option>
+        </select>
+      </div>
     </div>
 
     <script>
-        function toggleTaskContent(header) {
-            const content = header.nextElementSibling;
-            const isCollapsed = content.style.display === 'none' || content.style.display === '';
-            content.style.display = isCollapsed ? 'block' : 'none';
-            header.classList.toggle('collapsed', !isCollapsed);
-        }
+      function toggleTaskContent(header) {
+        const content = header.nextElementSibling;
+        const isCollapsed =
+          content.style.display === "none" || content.style.display === "";
+        content.style.display = isCollapsed ? "block" : "none";
+        header.classList.toggle("collapsed", !isCollapsed);
+      }
 
-        function handleDownload() {
-            const link = document.createElement('a');
-            link.href = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
-            link.download = 'Beispiel_Dokument.pdf';
-            link.click();
-        }
+      function handleDownload() {
+        const link = document.createElement("a");
+        link.href =
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+        link.download = "Beispiel_Dokument.pdf";
+        link.click();
+      }
 
-        function handleCorrectionUpload(event, assignment, student) {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.onchange = function (e) {
-                const fileName = e.target.files[0].name;
-                const alertBox = document.getElementById('correctionAlert');
-                alertBox.textContent = `Korrekturdatei "${fileName}" für ${student.name} hochgeladen `;
-                alertBox.innerHTML += '<span class="close" onclick="closeAlert()">&times;</span>';
-                alertBox.classList.add('show');
-                student.fileElement.textContent = fileName; // Update Dateiname
-                student.fileElement.style.color = '#000';
-                student.fileElement.style.fontStyle = 'normal';
-            };
-            input.click();
-            event.stopPropagation();
-        }
+      function handleCorrectionUpload(event, assignment, student) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.onchange = function (e) {
+          const fileName = e.target.files[0].name;
+          const alertBox = document.getElementById("correctionAlert");
+          alertBox.textContent = `Korrekturdatei "${fileName}" für ${student.name} hochgeladen `;
+          alertBox.innerHTML +=
+            '<span class="close" onclick="closeAlert()">&times;</span>';
+          alertBox.classList.add("show");
+          student.fileElement.textContent = fileName; // Update Dateiname
+          student.fileElement.style.color = "#000";
+          student.fileElement.style.fontStyle = "normal";
+        };
+        input.click();
+        event.stopPropagation();
+      }
 
-        function closeAlert() {
-            const alertBox = document.getElementById('correctionAlert');
-            alertBox.classList.remove('show');
-        }
+      function closeAlert() {
+        const alertBox = document.getElementById("correctionAlert");
+        alertBox.classList.remove("show");
+      }
 
-        function downloadAllSubmissions(taskName) {
-            alert(`Alle Abgaben für ${taskName} werden heruntergeladen.`);
-        }
+      function downloadAllSubmissions(taskName) {
+        alert(`Alle Abgaben für ${taskName} werden heruntergeladen.`);
+      }
+
+      const translation = {
+        german: {
+          headerText: "Abgabe System - Tutor",
+          task1Header: "Aufgabe 1 (Max. Punkte: 100)",
+          task1Deadline: "Abgabe bis: 03.01.2025",
+          task2Header: "Aufgabe 2 (Max. Punkte: 50)",
+          task2Deadline: "Abgabe bis: 15.01.2025",
+          task3Header: "Aufgabe 3 (Max. Punkte: 75)",
+          task3Deadline: "Abgabe bis: 30.01.2025",
+          points1: "Punkte",
+          points2: "Punkte",
+          points3: "Punkte",
+          pointsPlaceholder: "Punkte",
+          file1: "Datei",
+          file2: "Datei",
+          file3: "Datei",
+          actions1: "Aktionen",
+          actions2: "Aktionen",
+          actions3: "Aktionen",
+          noCorrectionUploaded1_1: "Keine Korrektur hochgeladen",
+          noCorrectionUploaded1_2: "Keine Korrektur hochgeladen",
+          noCorrectionUploaded2_1: "Keine Korrektur hochgeladen",
+          noCorrectionUploaded2_2: "Keine Korrektur hochgeladen",
+          noCorrectionUploaded3_1: "Keine Korrektur hochgeladen",
+          noCorrectionUploaded3_2: "Keine Korrektur hochgeladen",
+          viewSubmission1_1: "Bearbeitung einsehen",
+          viewSubmission1_2: "Bearbeitung einsehen",
+          viewSubmission2_1: "Bearbeitung einsehen",
+          viewSubmission2_2: "Bearbeitung einsehen",
+          viewSubmission3_1: "Bearbeitung einsehen",
+          viewSubmission3_2: "Bearbeitung einsehen",
+          submitCorrection1_1: "Korrektur einreichen",
+          submitCorrection1_2: "Korrektur einreichen",
+          submitCorrection2_1: "Korrektur einreichen",
+          submitCorrection2_2: "Korrektur einreichen",
+          submitCorrection3_1: "Korrektur einreichen",
+          submitCorrection3_2: "Korrektur einreichen",
+          downloadAll1: "Alle Bearbeitungen einsehen",
+          downloadAll2: "Alle Bearbeitungen einsehen",
+          downloadAll3: "Alle Bearbeitungen einsehen",
+        },
+        english: {
+          headerText: "Submission System - Tutor",
+          task1Header: "Task 1 (Max. Points: 100)",
+          task1Deadline: "Deadline: 03.01.2025",
+          task2Header: "Task 2 (Max. Points: 50)",
+          task2Deadline: "Deadline: 15.01.2025",
+          task3Header: "Task 3 (Max. Points: 75)",
+          task3Deadline: "Deadline: 30.01.2025",
+          points1: "Points",
+          points2: "Points",
+          points3: "Points",
+          pointsPlaceholder: "Points",
+          file1: "File",
+          file2: "File",
+          file3: "File",
+          actions1: "Actions",
+          actions2: "Actions",
+          actions3: "Actions",
+          noCorrectionUploaded1_1: "No correction uploaded",
+          noCorrectionUploaded1_2: "No correction uploaded",
+          noCorrectionUploaded2_1: "No correction uploaded",
+          noCorrectionUploaded2_2: "No correction uploaded",
+          noCorrectionUploaded3_1: "No correction uploaded",
+          noCorrectionUploaded3_2: "No correction uploaded",
+          viewSubmission1_1: "View Submission",
+          viewSubmission1_2: "View Submission",
+          viewSubmission2_1: "View Submission",
+          viewSubmission2_2: "View Submission",
+          viewSubmission3_1: "View Submission",
+          viewSubmission3_2: "View Submission",
+          submitCorrection1_1: "Submit Correction",
+          submitCorrection1_2: "Submit Correction",
+          submitCorrection2_1: "Submit Correction",
+          submitCorrection2_2: "Submit Correction",
+          submitCorrection3_1: "Submit Correction",
+          submitCorrection3_2: "Submit Correction",
+          downloadAll1: "View All Submissions",
+          downloadAll2: "View All Submissions",
+          downloadAll3: "View All Submissions",
+        },
+      };
+
+      function changeLanguage() {
+        const lang = document.getElementById("language").value;
+        const translate = translation[lang];
+
+        document.getElementById("header-text").textContent =
+          translate.headerText;
+
+        document.getElementById("task1-header").textContent =
+          translate.task1Header;
+        document.getElementById("task2-header").textContent =
+          translate.task2Header;
+        document.getElementById("task3-header").textContent =
+          translate.task3Header;
+
+        document.getElementById("task1-deadline").textContent =
+          translate.task1Deadline;
+        document.getElementById("task2-deadline").textContent =
+          translate.task2Deadline;
+        document.getElementById("task3-deadline").textContent =
+          translate.task3Deadline;
+
+        document.getElementById("points1").textContent = translate.points1;
+        document.getElementById("file1").textContent = translate.file1;
+        document.getElementById("actions1").textContent = translate.actions1;
+        document.getElementById("points2").textContent = translate.points2;
+        document.getElementById("file2").textContent = translate.file2;
+        document.getElementById("actions2").textContent = translate.actions2;
+        document.getElementById("points3").textContent = translate.points3;
+        document.getElementById("file3").textContent = translate.file3;
+        document.getElementById("actions3").textContent = translate.actions3;
+
+        const pointInputs = document.querySelectorAll(
+          'input[placeholder="Punkte"]'
+        );
+        pointInputs.forEach((input) => {
+          input.placeholder = translate.pointsPlaceholder;
+        });
+
+        document.getElementById("no-correction-uploaded1.1").textContent =
+          translate.noCorrectionUploaded1_1;
+        document.getElementById("no-correction-uploaded1.2").textContent =
+          translate.noCorrectionUploaded1_2;
+        document.getElementById("no-correction-uploaded2.1").textContent =
+          translate.noCorrectionUploaded2_1;
+        document.getElementById("no-correction-uploaded2.2").textContent =
+          translate.noCorrectionUploaded2_2;
+        document.getElementById("no-correction-uploaded3.1").textContent =
+          translate.noCorrectionUploaded3_1;
+        document.getElementById("no-correction-uploaded3.2").textContent =
+          translate.noCorrectionUploaded3_2;
+
+        document.getElementById("view-submission1.1").textContent =
+          translate.viewSubmission1_1;
+        document.getElementById("view-submission1.2").textContent =
+          translate.viewSubmission1_2;
+        document.getElementById("view-submission2.1").textContent =
+          translate.viewSubmission2_1;
+        document.getElementById("view-submission2.2").textContent =
+          translate.viewSubmission2_2;
+        document.getElementById("view-submission3.1").textContent =
+          translate.viewSubmission3_1;
+        document.getElementById("view-submission3.2").textContent =
+          translate.viewSubmission3_2;
+
+        document.getElementById("submit-correction1.1").textContent =
+          translate.submitCorrection1_1;
+        document.getElementById("submit-correction1.2").textContent =
+          translate.submitCorrection1_2;
+        document.getElementById("submit-correction2.1").textContent =
+          translate.submitCorrection2_1;
+        document.getElementById("submit-correction2.2").textContent =
+          translate.submitCorrection2_2;
+        document.getElementById("submit-correction3.1").textContent =
+          translate.submitCorrection3_1;
+        document.getElementById("submit-correction3.2").textContent =
+          translate.submitCorrection3_2;
+
+        document.getElementById("download-all1").textContent =
+          translate.downloadAll1;
+        document.getElementById("download-all2").textContent =
+          translate.downloadAll2;
+        document.getElementById("download-all3").textContent =
+          translate.downloadAll3;
+      }
+      changeLanguage();
     </script>
-</body>
+  </body>
 </html>

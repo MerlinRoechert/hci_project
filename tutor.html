@@ -157,11 +157,29 @@
             font-weight: bold;
             color: #155724;
         }
+
+        .download-all {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .download-all button {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .download-all button:hover {
+            background-color: #138496;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Abgabe System</h1>
+        <h1>Abgabe System - Tutor</h1>
         <div id="correctionAlert" class="alert">
             Korrekturdatei hochgeladen
             <span class="close" onclick="closeAlert()">&times;</span>
@@ -181,21 +199,24 @@
                 </div>
                 <div class="student-entry">
                     <span>Student 1</span>
-                    <input type="text" placeholder="Punkte">
+                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
                     </div>
                 </div>
                 <div class="student-entry">
                     <span>Student 2</span>
-                    <input type="text" placeholder="Punkte">
+                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 1', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
                     </div>
+                </div>
+                <div class="download-all">
+                    <button onclick="downloadAllSubmissions('Aufgabe 1')">Alle Bearbeitungen einsehen</button>
                 </div>
             </div>
         </div>
@@ -214,21 +235,24 @@
                 </div>
                 <div class="student-entry">
                     <span>Student 1</span>
-                    <input type="text" placeholder="Punkte">
+                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
                     </div>
                 </div>
                 <div class="student-entry">
                     <span>Student 2</span>
-                    <input type="text" placeholder="Punkte">
+                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
                     </div>
+                </div>
+                <div class="download-all">
+                    <button onclick="downloadAllSubmissions('Aufgabe 2')">Alle Bearbeitungen einsehen</button>
                 </div>
             </div>
         </div>
@@ -247,21 +271,24 @@
                 </div>
                 <div class="student-entry">
                     <span>Student 1</span>
-                    <input type="text" placeholder="Punkte">
+                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 3', { name: 'Student 1', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
                     </div>
                 </div>
                 <div class="student-entry">
                     <span>Student 2</span>
-                    <input type="text" placeholder="Punkte">
+                    <input type="text" placeholder="Punkte" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <span class="file-name">Keine Korrektur hochgeladen</span>
                     <div class="button-group">
-                        <button class="button" onclick="handleDownload()">Bearbeitung herunterladen</button>
-                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 2', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur hochladen</button>
+                        <button class="button" onclick="handleDownload()">Bearbeitung einsehen</button>
+                        <button class="button upload-button" onclick="handleCorrectionUpload(event, 'Aufgabe 3', { name: 'Student 2', fileElement: this.closest('.student-entry').querySelector('.file-name') })">Korrektur einreichen</button>
                     </div>
+                </div>
+                <div class="download-all">
+                    <button onclick="downloadAllSubmissions('Aufgabe 3')">Alle Bearbeitungen einsehen</button>
                 </div>
             </div>
         </div>
@@ -303,6 +330,11 @@
         function closeAlert() {
             const alertBox = document.getElementById('correctionAlert');
             alertBox.classList.remove('show');
+        }
+
+        function downloadAllSubmissions(taskName) {
+            alert(`Alle Abgaben für ${taskName} werden heruntergeladen.`);
+            // Implementiere hier die Logik zum gleichzeitigen Herunterladen aller Abgaben.
         }
     </script>
 </body>

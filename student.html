@@ -31,7 +31,6 @@
             opacity: 1;
             border: 1px solid #ccc;
             border-radius: 10px;
-            
         }
         .dropdown-card.disabled {
             background-color: #f9f9f9;
@@ -50,7 +49,6 @@
             background-color: #007BFF;
             color: white; 
             padding: 10px; 
-             
         }
         .dropdown-card .header div {
             flex: 1;
@@ -80,11 +78,17 @@
         .details .upload-button {
             margin-top: 10px;
             min-width: 150px;
-
-
         }
-        .details .file-name {
+        .details .submit-button {
             margin-left: 10px;
+            background-color: #28a745;
+        }
+        .details .file-info {
+            margin-top: 10px;
+        }
+        .details .file-info span {
+            display: block;
+            margin-bottom: 5px;
         }
         .alert {
             display: none;
@@ -101,10 +105,19 @@
     </style>
     <script>
         const uploadedFiles = {}; // Store uploaded files by dropdown-card index
+        const submittedFiles = {}; // Store submitted files by dropdown-card index
 
         function toggleDropdown(card) {
+            const index = Array.from(document.querySelectorAll('.dropdown-card')).indexOf(card);
+
             if (!card.classList.contains('disabled')) {
                 card.classList.toggle('open');
+
+                // Clear uploaded file if not submitted
+                if (!submittedFiles[index] && !card.classList.contains('open')) {
+                    const fileInfo = card.querySelector('.file-info');
+                    fileInfo.querySelector('.uploaded-file').textContent = "Zuletzt hochgeladen: Keine Datei";
+                }
             }
         }
 
@@ -143,7 +156,7 @@
                     alertBox.classList.remove('show');
                 }, 3000);
             } else {
-                alert('Keine Datei zum Herunterladen verfügbar.');
+                alert('Keine Datei zum Einsehen verfügbar.');
             }
         }
 
@@ -156,8 +169,8 @@
 
             input.onchange = function(e) {
                 const fileName = e.target.files[0].name;
-                const fileSpan = card.querySelector('.file-name');
-                fileSpan.textContent = fileName;
+                const fileInfo = card.querySelector('.file-info');
+                fileInfo.querySelector('.uploaded-file').textContent = `Zuletzt hochgeladen: ${fileName}`;
 
                 uploadedFiles[index] = fileName;
 
@@ -169,6 +182,29 @@
                 }, 3000);
             };
             input.click();
+        }
+
+        function handleSubmit(event) {
+            event.stopPropagation();
+            const card = event.target.closest('.dropdown-card');
+            const index = Array.from(document.querySelectorAll('.dropdown-card')).indexOf(card);
+            const fileName = uploadedFiles[index];
+
+            if (fileName) {
+                submittedFiles[index] = fileName;
+
+                const fileInfo = card.querySelector('.file-info');
+                fileInfo.querySelector('.submitted-file').textContent = `Eingereichte Datei: ${fileName}`;
+
+                const alertBox = document.getElementById('uploadAlert');
+                alertBox.textContent = `Datei "${fileName}" erfolgreich eingereicht`;
+                alertBox.classList.add('show');
+                setTimeout(() => {
+                    alertBox.classList.remove('show');
+                }, 3000);
+            } else {
+                alert('Bitte zuerst eine Datei hochladen, bevor Sie sie einreichen.');
+            }
         }
 
         function disablePastDueCards() {
@@ -203,41 +239,53 @@
     <div id="abgabeSystemStudi" class="page">
         <h1>Abgabe System - Studi</h1>
         <div id="downloadAlert" class="alert">Datei heruntergeladen</div>
-        <div id="uploadAlert" class="alert">Datei erfolgreich hochgeladen</div>
+        <div id="uploadAlert" class="alert">Datei erfolgreich eingereicht</div>
         <div class="dropdown-card" onclick="toggleDropdown(this)">
             <div class="header">
                 <div>Aufgabe 1</div>
                 <div>Abgabe bis 03.01.2025</div>
                 <div>Erreichte Punkte: 66</div>
-                <button class="button" onclick="handleDownload(event);">Korrektur herunterladen</button>
+                <button class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
             </div>
             <div class="details">
-                <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
-                <span class="file-name">Keine Datei hochgeladen</span>
+                <div class="file-info">
+                    <span class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
+                    <span class="submitted-file">Eingereichte Datei: Keine Datei</span>
+                </div>
+                <button class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
+                <button class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
             </div>
         </div>
         <div class="dropdown-card" onclick="toggleDropdown(this)">
             <div class="header">
                 <div>Aufgabe 2</div>
                 <div>Abgabe bis 15.01.2025</div>
-                <div>Erreichte Punkte: XX</div>
-                <button class="button" onclick="handleDownload(event);">Korrektur herunterladen</button>
+                <div>Erreichte Punkte: Bewertung ausstehend</div>
+                <button class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
             </div>
             <div class="details">
-                <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
-                <span class="file-name">Keine Datei hochgeladen</span>
+                <div class="file-info">
+                    <span class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
+                    <span class="submitted-file">Eingereichte Datei: Keine Datei</span>
+                </div>
+                <button class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
+                <button class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
             </div>
         </div>
         <div class="dropdown-card" onclick="toggleDropdown(this)">
             <div class="header">
                 <div>Aufgabe 3</div>
                 <div>Abgabe bis 30.01.2025</div>
-                <div>Erreichte Punkte: XX</div>
-                <button class="button" onclick="handleDownload(event);">Korrektur herunterladen</button>
+                <div>Erreichte Punkte: Bewertung ausstehend</div>
+                <button class="button" onclick="handleDownload(event);">Korrektur einsehen</button>
             </div>
             <div class="details">
-                <button class="button upload-button" onclick="handleUpload(event);">Hochladen</button>
-                <span class="file-name">Keine Datei hochgeladen</span>
+                <div class="file-info">
+                    <span class="uploaded-file">Zuletzt hochgeladen: Keine Datei</span>
+                    <span class="submitted-file">Eingereichte Datei: Keine Datei</span>
+                </div>
+                <button class="button upload-button" onclick="handleUpload(event);">Bearbeitung hochladen</button>
+                <button class="button submit-button" onclick="handleSubmit(event);">Bearbeitung einreichen</button>
             </div>
         </div>
     </div>
